@@ -7,7 +7,7 @@ read repoName
 
 if [ "$repoName" == "" ]; then
     repoName=$(basename `pwd`)
-    ClearScreen "1"
+    ClearUpperLine "1"
     echo "repository name: $repoName"
 fi
 
@@ -58,7 +58,7 @@ options=("public" "private")
 cursorPoint=0
 
 # ターミナルの標準出力をn行削除する関数
-ClearScreen() {
+ClearUpperLine() {
     for i in $(seq 1 "$1"); do
         printf "\033[%dA" "1"
         printf "\033[2K"
@@ -84,19 +84,19 @@ while true; do
         "Up")
             if [ $cursorPoint -gt 0 ]; then
                 cursorPoint=$(($cursorPoint-1))
-                ClearScreen ${#options[@]}
+                ClearUpperLine ${#options[@]}
                 ShowMenu
             fi
             ;;
         "Down")
             if [ $cursorPoint -lt 1 ]; then
                 cursorPoint=$(($cursorPoint+1))
-                ClearScreen ${#options[@]}
+                ClearUpperLine ${#options[@]}
                 ShowMenu
             fi
             ;;
         "Enter")
-            ClearScreen $((${#options[@]}+1))
+            ClearUpperLine $((${#options[@]}+1))
             visibility=${options[$cursorPoint]}
             echo "visibility: $visibility"
             break
@@ -109,7 +109,7 @@ read flag
 case $flag in 
     "y"|"Y"|"")
         if [ "$flag" == "" ]; then
-            ClearScreen "1"
+            ClearUpperLine "1"
             echo "This will create '$repoName' in the GitHub repository. Continue? (Y/n): Y"
         fi
         printf "\e[32m$ gh repo create $repoName --$visibility\e[m\n"
@@ -129,7 +129,7 @@ read flag
 case $flag in 
     "y"|"Y"|"")
         if [ "$flag" == "" ]; then
-            ClearScreen "1"
+            ClearUpperLine "1"
             echo "Add a README file? (Y/n): Y"
         fi
         printf "\e[32m$ echo '# $repoName' >> README.md\e[m\n"
@@ -147,7 +147,7 @@ if [ ! -e ".gitignore" ]; then
     case $flag in 
         "y"|"Y"|"")
             if [ "$flag" == "" ]; then
-                ClearScreen "1"
+                ClearUpperLine "1"
                 echo "Add .gitignore? (Y/n): Y"
             fi
             printf "\e[32m$ touch .gitignore\e[m\n"
@@ -158,7 +158,7 @@ if [ ! -e ".gitignore" ]; then
             case $flag in
                 "y"|"Y"|"")
                     if [ "$flag" == "" ]; then
-                        ClearScreen "1"
+                        ClearUpperLine "1"
                         echo "Edit .gitignore? (Y/n): Y"
                         printf "\e[32m$ vim .gitignore\e[m\n"
                         # .gitignoreを編集
