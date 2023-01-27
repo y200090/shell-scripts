@@ -117,6 +117,9 @@ case $flag in
         gh repo create $repoName --$visibility
         ;;
     "n"|*)
+        echo "---------------------------------"
+        echo "Cancel."
+        return 0
         ;;
 esac
 echo "---------------------------------"
