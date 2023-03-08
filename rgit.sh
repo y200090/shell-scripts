@@ -1,9 +1,26 @@
 #!/bin/bash
 
 echo "Create a new repository on GitHub."
+
+if [ "$1" == "--local" ]; then
+    echo "---------------------------------"
+    echo -n "Please enter local user email: "
+    read localEmail
+    echo -n "Please enter local user name: "
+    read localName
+fi
+
 echo "---------------------------------"
 echo -n "repository name: "
 read repoName
+
+# ターミナルの標準出力をn行削除する関数
+ClearUpperLine() {
+    for i in $(seq 1 "$1"); do
+        printf "\033[%dA" "1"
+        printf "\033[2K"
+    done
+}
 
 if [ "$repoName" == "" ]; then
     repoName=$(basename `pwd`)
@@ -56,14 +73,6 @@ CaptureSpecialKeys() {
 
 options=("public" "private")
 cursorPoint=0
-
-# ターミナルの標準出力をn行削除する関数
-ClearUpperLine() {
-    for i in $(seq 1 "$1"); do
-        printf "\033[%dA" "1"
-        printf "\033[2K"
-    done
-}
 
 # 選択肢を出力する関数
 ShowMenu() {
@@ -177,6 +186,12 @@ fi
 
 printf "\e[32m$ git init\e[m\n"
 git init
+if [ "$1" == "--local" ]; then
+    printf "\e[32m$ git config --local user.email \"$localEmail\"\e[m\n"
+    git config --local user.email $localEmail
+    printf "\e[32m$ git config --local user.name \"$localName\"\e[m\n"
+    git config --local user.name $localName
+fi
 printf "\e[32m$ git add .\e[m\n"
 git add .
 printf "\e[32m$ git commit -m 'first commit'\e[m\n"
